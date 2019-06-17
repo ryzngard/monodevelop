@@ -1,4 +1,4 @@
-//
+﻿//
 // CommitDialog.cs
 //
 // Authors:
@@ -30,13 +30,13 @@
 // THE SOFTWARE.
 
 using System;
-using Gtk;
-using MonoDevelop.Core;
-using Mono.Addins;
-using MonoDevelop.Projects;
-using MonoDevelop.Components;
 using System.Collections.Generic;
 using System.Linq;
+using Gtk;
+using Mono.Addins;
+using MonoDevelop.Components;
+using MonoDevelop.Core;
+using MonoDevelop.Projects;
 
 namespace MonoDevelop.VersionControl.Dialogs
 {
@@ -164,10 +164,10 @@ namespace MonoDevelop.VersionControl.Dialogs
 
 		TreeIter AppendFileInfo (VersionInfo info)
 		{
-			Xwt.Drawing.Image statusicon = VersionControlService.LoadIconForStatus (info.Status);
-			string lstatus = VersionControlService.GetStatusLabel (info.Status);
+			var status = changeSet.Repository.GetVirtualStatusViewStatus (info, true);
+			var statusicon = VersionControlService.LoadIconForStatus (status);
+			string lstatus = VersionControlService.GetStatusLabel (status);
 			string localpath;
-
 			if (info.IsDirectory)
 				localpath = (!info.LocalPath.IsChildPathOf (changeSet.BaseLocalPath) ?
 								"." :
@@ -176,11 +176,9 @@ namespace MonoDevelop.VersionControl.Dialogs
 				localpath = System.IO.Path.GetFileName ((string)info.LocalPath);
 
 			if (localpath.Length > 0 && localpath [0] == System.IO.Path.DirectorySeparatorChar) localpath = localpath.Substring (1);
-			if (localpath == "") { localpath = "."; } 
+			if (localpath == "") { localpath = "."; }
 
-			TreeIter it = store.AppendValues (statusicon, lstatus, localpath, true, info);
-
-			return it;
+			return store.AppendValues (statusicon, lstatus, localpath, true, info);
 		}
 
 		void HandleAllowCommitChanged (object sender, EventArgs e)
@@ -219,8 +217,9 @@ namespace MonoDevelop.VersionControl.Dialogs
 			store.Clear ();
 
 			foreach (ChangeSetItem info in items) {
-				Xwt.Drawing.Image statusicon = VersionControlService.LoadIconForStatus (info.Status);
-				string lstatus = VersionControlService.GetStatusLabel (info.Status);
+				var status = changeSet.Repository.GetVirtualStatusViewStatus (info.VersionInfo, true);
+				var statusicon = VersionControlService.LoadIconForStatus (status);
+				string lstatus = VersionControlService.GetStatusLabel (status);
 				string localpath;
 
 				if (info.IsDirectory)

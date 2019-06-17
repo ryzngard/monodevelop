@@ -1,4 +1,4 @@
-
+﻿
 using System;
 using System.Linq;
 using System.IO;
@@ -185,6 +185,8 @@ namespace MonoDevelop.VersionControl
 				case VersionStatus.Missing:
 				case VersionStatus.ScheduledDelete:
 					return icon_removed;
+				case VersionStatus.Unversioned:
+					return overlay_unversioned;
 			}
 			return null;
 		}

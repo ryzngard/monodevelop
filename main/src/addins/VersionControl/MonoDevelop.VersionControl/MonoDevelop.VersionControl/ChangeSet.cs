@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -150,7 +150,9 @@ namespace MonoDevelop.VersionControl
 	public class ChangeSetItem
 	{
 		VersionInfo versionInfo;
-		
+
+		internal VersionInfo VersionInfo => versionInfo;
+
 		internal ChangeSetItem (VersionInfo versionInfo)
 		{
 			this.versionInfo = versionInfo;
